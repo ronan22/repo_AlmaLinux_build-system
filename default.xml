@@ -6,10 +6,10 @@
   <!-- defaults -->
   <default remote="github" sync-j="4" revision="master"/>
   
-  <project name="AlmaLinux/albs-frontend" />
-  <project name="AlmaLinux/albs-node" />
-  <project name="AlmaLinux/albs-web-server" />
-  <project name="AlmaLinux/alts" />
-  <project name="AlmaLinux/gitea-listener" />
+  <project name="AlmaLinux/albs-frontend"   path="albs-frontend" />
+  <project name="AlmaLinux/albs-node"       path="albs-node" />
+  <project name="AlmaLinux/albs-web-server" path="albs-web-server" />
+  <project name="AlmaLinux/alts"            path="alts" />
+  <project name="AlmaLinux/gitea-listener"  path="gitea-listener" />
 
 </manifest>
