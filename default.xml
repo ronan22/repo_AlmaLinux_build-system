@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+  <remote name="github" fetch="https://github.com/" />
+  
+  <!-- defaults -->
+  <default remote="github" sync-j="4" revision="master"/>
+  
+  <project name="AlmaLinux/albs-frontend" />
+  <project name="AlmaLinux/albs-node" />
+  <project name="AlmaLinux/albs-web-server" />
+  <project name="AlmaLinux/alts" />
+  <project name="AlmaLinux/gitea-listener" />
+
+</manifest>
