@@ -12,15 +12,6 @@ repo sync
 
 ## configure build-system
 
-### alts
-
-```bash
-cd "${BUILD_SYS_ROOT}"
-cd alts
-rm -fr configs/alts_config.yaml
-cp configs/example_config.yaml configs/alts_config.yaml
-```
-
 ###  albs-web-server
 
 #### Generate github client ID
@@ -43,9 +34,8 @@ your_github_secret=XXXXX
 #### Configure the DB
 
 ```bash
-your_db_password=admin
+your_db_password=password
 ```
-
 
 #### Configure rabbitmq
 
@@ -67,17 +57,26 @@ your_generated_token=XXXX
 ```
 
 ```bash
-sed -i "s/result_backend:.*/result_backend: \'local\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
+cd "${BUILD_SYS_ROOT}"
+cd alts
+rm -fr configs/alts_config.yaml
+cp configs/example_config.yaml configs/alts_config.yaml
+
+
+
+sed -i "s/use_ssl:.*/use_ssl: false/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
+
+sed -i "s/result_backend:.*/result_backend: \'file:\/\/\/srv\/celery_results\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
 sed -i "s/rabbitmq_user:.*/rabbitmq_user: \'${rabbitmq_user}\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
 sed -i "s/rabbitmq_password:.*/rabbitmq_password: \'${random_password}\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
 
-sed -i "s/pulp_host:.*/pulp_host: \'http://pulp\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
+sed -i "s/pulp_host:.*/pulp_host: \'http:\/\/pulp\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
 sed -i "s/pulp_user:.*/pulp_user: \'admin\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
 sed -i "s/pulp_password:.*/pulp_password: \'admin\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
 
 sed -i "s/jwt_secret:.*/jwt_secret: \'${random_secret}\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
 
-sed -i "s/bs_host:.*/bs_host: \'http://web_server:8000\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
+sed -i "s/bs_host:.*/bs_host: \'http:\/\/web_server:8000\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
 sed -i "s/bs_token:.*/bs_token: \'XXXXXXXX\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
 
 sed -i "s/testing:.*/testing: \'true\'/g"  "${BUILD_SYS_ROOT}/alts/configs/alts_config.yaml"
@@ -194,5 +193,9 @@ cd "${BUILD_SYS_ROOT}"
 cd albs-web-server
 
 pip3 install -r  requirements.txt
-ALTS_TOKEN="$your_generated_token"  GITHUB_CLIENT="$your_github_client_id" GITHUB_CLIENT_SECRET="$your_github_secret" JWT_SECRET="$random_secret" PULP_HOST=http://0.0.0.0:8081 PULP_USER=admin PULP_PASSWORD=admin  python scripts/bootstrap_repositories.py -c reference_data/platforms.yaml -v
+
+
+echo 127.0.0.1 db | sudo tee -a /etc/hosts
+source vars.env
+ALTS_TOKEN="$ALTS_TOKEN"  GITHUB_CLIENT="$GITHUB_CLIENT" GITHUB_CLIENT_SECRET="$GITHUB_CLIENT_SECRET" JWT_SECRET="$JWT_SECRET" PULP_HOST=http://0.0.0.0:8081 PULP_USER=admin PULP_PASSWORD=admin  python scripts/bootstrap_repositories.py -c reference_data/platforms.yaml -v
 ```
